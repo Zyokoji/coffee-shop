@@ -1,4 +1,4 @@
-export default function DrinkList({ drinks, onDelete }) {
+export default function DrinkList({ drinks, onDelete, onSelect }) {
   if (drinks.length === 0) return <p className="empty">No drinks yet. Add one.</p>;
 
   return (
@@ -20,6 +20,9 @@ export default function DrinkList({ drinks, onDelete }) {
           <div className="tags">
             {drink.customizable && <span className="tag">customizable</span>}
           </div>
+          <button className="add-button" onClick={() => onSelect(drink)}>
+            {drink.customizable ? "Customize & add" : "Add to order"}
+          </button>
         </li>
       ))}
     </ul>
