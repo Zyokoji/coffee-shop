@@ -1,0 +1,4 @@
+# The Vercel CLI does NOT read .gitignore. It reads this file instead.
+# Anything listed here stays on your laptop when you run: npx vercel --prod
+# Your secrets belong in Vercel's Environment Variables page, not in an uploaded file.
+.env

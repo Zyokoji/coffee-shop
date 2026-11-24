@@ -1,0 +1,6 @@
+# Git never saves these.
+node_modules
+.env
+.vercel
+
+.vercel
