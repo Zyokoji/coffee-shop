@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { API_URL, getHealth, getDrinks, addDrink, deleteDrink } from "./api.js";
+import { API_URL, getHealth, getDrinks, addDrink, updateDrink, deleteDrink } from "./api.js";
 import ConnectionPanel from "./components/ConnectionPanel.jsx";
 import Problem from "./components/Problem.jsx";
 import DrinkList from "./components/DrinkList.jsx";
@@ -18,6 +18,7 @@ export default function App() {
   const [session, setSession] = useState(null);
   const [order, setOrder] = useState([]);
   const [selectedDrink, setSelectedDrink] = useState(null);
+  const [editingDrink, setEditingDrink] = useState(null);
 
   async function load() {
     if (!API_URL) {
@@ -55,9 +56,16 @@ export default function App() {
     setDrinks((current) => [...current, saved]);
   }
 
+  async function handleUpdate(changes) {
+    const saved = await updateDrink(editingDrink.id, changes); // throws on a 400, the form shows the message
+    setDrinks((current) => current.map((drink) => (drink.id === saved.id ? saved : drink)));
+    setEditingDrink(null);
+  }
+
   async function handleDelete(id) {
     await deleteDrink(id);
     setDrinks((current) => current.filter((drink) => drink.id !== id));
+    if (editingDrink?.id === id) setEditingDrink(null);
   }
 
   // Customizable drinks open the popup; the rest go straight into the order.
@@ -117,7 +125,7 @@ export default function App() {
             <h2>
               Drinks <span className="count">{drinks.length}</span>
             </h2>
-            <DrinkList drinks={drinks} onDelete={handleDelete} onSelect={handleSelect} />
+            <DrinkList drinks={drinks} onDelete={handleDelete} onEdit={setEditingDrink} onSelect={handleSelect} />
           </section>
           <aside>
             <OrderCart
@@ -126,8 +134,22 @@ export default function App() {
               onChangeQuantity={changeQuantity}
               onClear={() => setOrder([])}
             />
-            <h2>Add a drink</h2>
-            <AddDrinkForm onAdd={handleAdd} />
+            {editingDrink ? (
+              <>
+                <h2>Edit {editingDrink.name}</h2>
+                <AddDrinkForm
+                  key={editingDrink.id}
+                  initial={editingDrink}
+                  onAdd={handleUpdate}
+                  onCancel={() => setEditingDrink(null)}
+                />
+              </>
+            ) : (
+              <>
+                <h2>Add a drink</h2>
+                <AddDrinkForm onAdd={handleAdd} />
+              </>
+            )}
           </aside>
         </main>
       )}

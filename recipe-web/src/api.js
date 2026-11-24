@@ -64,3 +64,10 @@ export const addDrink = (drink) =>
   });
 
 export const deleteDrink = (id) => request(`/api/drinks/${id}`, { method: "DELETE" });
+
+export const updateDrink = (id, drink) =>
+  request(`/api/drinks/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(drink),
+  });

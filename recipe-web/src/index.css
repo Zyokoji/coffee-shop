@@ -87,3 +87,4 @@ button.small { font-size: 0.8rem; padding: 2px 8px; }
 .extra-option { display: flex; align-items: center; gap: 8px; }
 .customizer-total { margin: 4px 0 0; font-size: 1.1rem; font-weight: 600; }
 .customizer-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.card-buttons { display: flex; gap: 6px; flex-shrink: 0; }

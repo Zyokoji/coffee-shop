@@ -2,8 +2,20 @@ import { useState } from "react";
 
 const EMPTY = { name: "", category: "", price: "", description: "", emoji: "", customizable: true };
 
-export default function AddDrinkForm({ onAdd }) {
-  const [form, setForm] = useState(EMPTY);
+// Used for both adding and editing. Pass `initial` (a drink) to edit it.
+export default function AddDrinkForm({ onAdd, initial, onCancel }) {
+  const [form, setForm] = useState(
+    initial
+      ? {
+          name: initial.name,
+          category: initial.category,
+          price: String(initial.price),
+          description: initial.description ?? "",
+          emoji: initial.emoji ?? "",
+          customizable: initial.customizable,
+        }
+      : EMPTY
+  );
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
 
@@ -60,8 +72,13 @@ export default function AddDrinkForm({ onAdd }) {
       </label>
       {error && <p className="form-error">{error}</p>}
       <button type="submit" disabled={saving}>
-        {saving ? "Saving..." : "Add drink"}
+        {saving ? "Saving..." : initial ? "Save changes" : "Add drink"}
       </button>
+      {onCancel && (
+        <button type="button" className="ghost" onClick={onCancel}>
+          Cancel
+        </button>
+      )}
     </form>
   );
 }
