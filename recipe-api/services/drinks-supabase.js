@@ -28,3 +28,9 @@ export async function deleteDrink(id) {
   if (error) throw error;
   return data.length > 0; // true if something was deleted
 }
+
+export async function updateDrink(id, drink) {
+  const { data, error } = await supabase.from("drinks").update(drink).eq("id", id).select(COLUMNS).maybeSingle();
+  if (error) throw error;
+  return data; // null when there is no drink with that id
+}

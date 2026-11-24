@@ -3,7 +3,7 @@
 
 import { Router } from "express";
 import { checkId, validateDrink } from "../middleware/validate.js";
-import { listDrinks, getDrink, createDrink, deleteDrink } from "../services/drinks.js";
+import { listDrinks, getDrink, createDrink, updateDrink, deleteDrink } from "../services/drinks.js";
 import { requireAuth } from "../middleware/require-auth.js";
 
 const router = Router();
@@ -24,6 +24,13 @@ router.get("/:id", checkId, async (req, res) => {
 //                            "description": "...", "emoji": "☕", "customizable": true }
 router.post("/", requireAuth, validateDrink, async (req, res) => {
   res.status(201).json(await createDrink(req.drink));
+});
+
+// PUT /api/drinks/3   body: the whole drink, same shape as POST
+router.put("/:id", requireAuth, checkId, validateDrink, async (req, res) => {
+  const drink = await updateDrink(req.drinkId, req.drink);
+  if (!drink) return res.status(404).json({ error: `No drink with id ${req.drinkId}` });
+  res.json(drink);
 });
 
 // DELETE /api/drinks/3

@@ -12,4 +12,4 @@ import * as fromSample from "./drinks-sample.js";
 
 const source = config.useSupabase ? fromSupabase : fromSample;
 
-export const { listDrinks, getDrink, createDrink, deleteDrink } = source;
+export const { listDrinks, getDrink, createDrink, updateDrink, deleteDrink } = source;

@@ -29,3 +29,10 @@ export async function deleteDrink(id) {
   drinks = drinks.filter((drink) => drink.id !== id);
   return drinks.length < before;
 }
+
+export async function updateDrink(id, drink) {
+  const index = drinks.findIndex((item) => item.id === id);
+  if (index === -1) return null;
+  drinks[index] = { ...drinks[index], ...drink, id };
+  return drinks[index];
+}
